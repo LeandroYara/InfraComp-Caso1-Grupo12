@@ -35,33 +35,39 @@ public class Buzon {
         while (buff.isEmpty()) {
             Thread.yield();
         }
-
         synchronized (this) {
+            System.out.println("tamaño buffer recepción antes de remover: " + buff.size() + " --------");
             String mensaje = buff.remove(0);
             notify();
             System.out.println("Se retira mensaje " + mensaje);
-            System.out.println("tamaño buffer recepción : " + buff.size() + " --------");
+          
             return mensaje;
         }
 
     }
 
     public synchronized void escribirMensajePasivo(String mensaje) {
+        System.out.println("tamaño al escribir"+buff.size());
+        int tamañooo=buff.size();
         while (buff.size() == tamano) {
             try {
+                System.out.println("Productor en espera");
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println(mensaje);
+        
         buff.add(mensaje);
-        notify();
+        System.out.println(mensaje);
+        notifyAll();
+        System.out.println("ProductorNotifica");
     }
 
     public synchronized String retirarMensajePasivo() {
         while (buff.isEmpty()) {
             try {
+                System.out.println("Consumidor en espera");
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -69,10 +75,10 @@ public class Buzon {
         }
         String mensaje = buff.remove(0);
         System.out.println("Se retira mensaje " + mensaje);
-        System.out.println("tamaño buffer recepción : " + buff.size() + " --------");
         notify();
+        System.out.println("Consumidor notifica");
+        System.out.println("tamaño buffer al notificar: "+buff.size());
         return mensaje;
-
     }
 
     public int darNivel() {

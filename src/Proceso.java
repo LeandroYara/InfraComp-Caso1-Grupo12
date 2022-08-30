@@ -40,6 +40,9 @@ public class Proceso extends Thread {
             String mensajeFin = "";
             while (!mensajeFin.equals("FIN")) {
                 mensajeFin = this.recogida.retirarMensajeActivo();
+                if(mensajeFin==null){
+                    return;
+                }
             }
         }
     }
