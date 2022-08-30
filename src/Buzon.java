@@ -23,22 +23,27 @@ public class Buzon {
         while (buff.size() == tamano) {
             Thread.yield();
         }
-        synchronized(this){
-        System.out.println(mensaje);
-        buff.add(mensaje);
-        System.out.println("tamaño buffer escritura : " + buff.size() + " --------");
-        notify();}
+        synchronized (this) {
+            System.out.println(mensaje);
+            buff.add(mensaje);
+            System.out.println("tamaño buffer escritura : " + buff.size() + " --------");
+            notify();
+        }
     }
 
-    public synchronized String retirarMensajeActivo(int id) {
-        while (buff.isEmpty() ) {
+    public String retirarMensajeActivo() {
+        while (buff.isEmpty()) {
             Thread.yield();
         }
-        String mensaje = null;
-            mensaje = buff.get(0);
-            buff.remove(0);
-            notify(); 
-        return mensaje;
+
+        synchronized (this) {
+            String mensaje = buff.remove(0);
+            notify();
+            System.out.println("Se retira mensaje " + mensaje);
+            System.out.println("tamaño buffer recepción : " + buff.size() + " --------");
+            return mensaje;
+        }
+
     }
 
     public synchronized void escribirMensajePasivo(String mensaje) {
@@ -55,18 +60,17 @@ public class Buzon {
     }
 
     public synchronized String retirarMensajePasivo() {
-        while (buff.isEmpty() ) {
+        while (buff.isEmpty()) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        String mensaje =  buff.remove(0);
-            System.out.println("Se retira mensaje " + mensaje);
-            System.out.println("tamaño buffer recepción : " + buff.size() + " --------");
-           
-            notify();
+        String mensaje = buff.remove(0);
+        System.out.println("Se retira mensaje " + mensaje);
+        System.out.println("tamaño buffer recepción : " + buff.size() + " --------");
+        notify();
         return mensaje;
 
     }
