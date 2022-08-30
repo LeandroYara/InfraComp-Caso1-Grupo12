@@ -9,11 +9,11 @@ public class App{
         Proceso procesoInicial = new Proceso(0, buzonInicial, numMensajes);  
         procesoInicial.start();
         
-        Buzon[] buzonesIntermedios=new Buzon[2];
-        Proceso[] procesosIntermedios= new Proceso[2];      
+        Buzon[] buzonesIntermedios=new Buzon[3];
+        Proceso[] procesosIntermedios= new Proceso[3];      
         int tamanoBuzonFinal=10;
 
-        for(int i=0; i<2;i++){
+        for(int i=0; i<3;i++){
         buzonesIntermedios[i]=new Buzon(tamanoBuzonFinal, 1, i+1);  
          procesosIntermedios[i]= new Proceso(i,1
          ,buzonInicial,buzonesIntermedios[i]);
