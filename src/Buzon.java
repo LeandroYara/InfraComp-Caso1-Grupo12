@@ -19,14 +19,15 @@ public class Buzon {
         this.nivel = nivel;
     }
 
-    public synchronized void escribirMensajeActivo(String mensaje) {
+    public void escribirMensajeActivo(String mensaje) {
         while (buff.size() == tamano) {
             Thread.yield();
         }
+        synchronized(this){
         System.out.println(mensaje);
         buff.add(mensaje);
         System.out.println("tamaño buffer escritura : " + buff.size() + " --------");
-        notify();
+        notify();}
     }
 
     public synchronized String retirarMensajeActivo(int id) {
