@@ -20,64 +20,60 @@ public class Buzon {
     }
 
     public void escribirMensajeActivo(String mensaje) {
-        while (buff.size() == tamano) {
+        while (estaLleno()) {
             Thread.yield();
         }
         synchronized (this) {
-            System.out.println(mensaje);
             buff.add(mensaje);
-            System.out.println("tamaño buffer escritura : " + buff.size() + " --------");
             notify();
         }
     }
 
     public String retirarMensajeActivo() {
-        while (buff.isEmpty()) {
-            Thread.yield();
+        while (estaVacio()) {
+            Thread.yield();            
         }
         synchronized (this) {
-            System.out.println("tamaño buffer recepción antes de remover: " + buff.size() + " --------");
-            String mensaje = buff.remove(0);
-            notify();
-            System.out.println("Se retira mensaje " + mensaje);
-          
+            String mensaje ="";
+            try{
+            mensaje= this.buff.remove(0);
+            System.out.println("Se retiró el mensaje: "+ mensaje);
+            System.out.println("El tamaño del buffer al momento de retirar fue: "+ buff.size());
+            notify();}
+            catch(Exception e){
+                e.printStackTrace();
+            }
             return mensaje;
         }
 
     }
 
-    public synchronized void escribirMensajePasivo(String mensaje) {
-        System.out.println("tamaño al escribir"+buff.size());
-        int tamañooo=buff.size();
+    public synchronized void escribirMensajePasivo(String mensaje, int nivel,int id) {
         while (buff.size() == tamano) {
             try {
-                System.out.println("Productor en espera");
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        
         buff.add(mensaje);
-        System.out.println(mensaje);
+        System.out.println("En el nivel " +nivel+ " el thread "+id+ " escribió: "+mensaje);
+        System.out.println("El tamaño del buffer "+"N"+nivel+"ID"+id+ " al escribir es: "+buff.size());
         notifyAll();
-        System.out.println("ProductorNotifica");
     }
 
-    public synchronized String retirarMensajePasivo() {
+    public synchronized String retirarMensajePasivo(int nivel,int id) {
         while (buff.isEmpty()) {
             try {
-                System.out.println("Consumidor en espera");
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
         String mensaje = buff.remove(0);
-        System.out.println("Se retira mensaje " + mensaje);
+        System.out.println("N"+nivel+"ID"+id+": retiró "+mensaje);
+        System.out.println("El tamaño del buffer "+"N"+nivel+"ID"+id+ " al retirar es: "+buff.size());
         notify();
-        System.out.println("Consumidor notifica");
-        System.out.println("tamaño buffer al notificar: "+buff.size());
         return mensaje;
     }
 
@@ -87,6 +83,12 @@ public class Buzon {
 
     public int darId() {
         return id;
+    }
+    public synchronized boolean estaVacio(){
+        return buff.size()==0;
+    }
+    public synchronized boolean estaLleno(){
+        return buff.size()==tamano;
     }
 
 }
