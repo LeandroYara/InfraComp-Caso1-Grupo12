@@ -10,17 +10,18 @@ public class App{
         procesoInicial.start();
         
         Buzon[] buzonesIntermedios=new Buzon[3];
-        Proceso[] procesosIntermedios= new Proceso[6];      
+        Proceso[] procesosIntermedios= new Proceso[3];      
+        // Proceso[] procesosIntermedios= new Proceso[6];      
         int tamanoBuzonFinal=1;
 
         for(int i=0; i<3;i++){
         buzonesIntermedios[i]=new Buzon(tamanoBuzonFinal, 1, i+1);  
          procesosIntermedios[i]= new Proceso(i,1
          ,buzonInicial,buzonesIntermedios[i]);
-         procesosIntermedios[i+3]= new Proceso(i,2
-         ,buzonesIntermedios[i],buzonInicial);
+        //  procesosIntermedios[i+3]= new Proceso(i,2
+        //  ,buzonesIntermedios[i],buzonInicial);
          procesosIntermedios[i].start();
-         procesosIntermedios[i+3].start();
+        //  procesosIntermedios[i+3].start();
         }
         bol=true;
     }

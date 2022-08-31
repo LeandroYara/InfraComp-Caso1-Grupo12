@@ -25,6 +25,7 @@ public class Buzon {
         }
         synchronized (this) {
             buff.add(mensaje);
+            System.out.println("Buzon Inicial Escribió: "+mensaje);
             notify();
         }
     }
