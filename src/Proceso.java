@@ -28,18 +28,18 @@ public class Proceso extends Thread {
         if (nivel == 0) {// Thread inicial escribe los n mensajes
             for (int i = 0; i < numSubConjuntos; i++) {
                 if (i < numSubConjuntos - 1) {
-                    entrega.escribirMensajeActivo("Se envía mensaje"+"'" + (i) + "'");
+                    entrega.escribirMensajePasivo("Se envía mensaje"+"'" + (i) + "'", nivel, 0);
                 } else {
                     for (int j = 0; j < 3; j++)
                     {
-                        entrega.escribirMensajeActivo("FIN");
+                        entrega.escribirMensajePasivo("FIN", 0, 0);
                     }
                 }
             }
         } else if(nivel==1) {
             String mensajeFin = "";
             while (!mensajeFin.equals("FIN")) {
-                mensajeFin = this.recogida.retirarMensajePasivo(nivel,id);
+                mensajeFin = this.recogida.retirarMensajeActivo();
                 // this.entrega.escribirMensajePasivo(mensajeFin,nivel,id);
                
             }

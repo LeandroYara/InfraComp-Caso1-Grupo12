@@ -39,7 +39,7 @@ public class Buzon {
             try{
             mensaje= this.buff.remove(0);
             System.out.println("Se retiró el mensaje: "+ mensaje);
-            System.out.println("El tamaño del buffer al momento de retirar fue: "+ buff.size());
+            System.out.println("-----El tamaño del buffer al momento de retirar fue: "+ buff.size());
             notify();}
             catch(Exception e){
                 e.printStackTrace();
