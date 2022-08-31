@@ -9,7 +9,6 @@ public class Proceso extends Thread {
 	private String mensajeActual;
 	private int numeroSubconjuntos;
 	
-	
 	public Proceso (int nuevaFila, int nuevoNivel, Buzon nuevaEntrada, Buzon nuevaSalida) {
 		
 		this.fila = nuevaFila;
@@ -34,17 +33,15 @@ public Proceso (int nuevaFila, int nuevoNivel, Buzon nuevaEntrada, Buzon nuevaSa
 		if (this.nivel == 0) {
 			int contadorSubconjuntos = 1;
 			while (contadorSubconjuntos <= this.numeroSubconjuntos) {
-				String mensajeActual = "M" + Integer.toString(contadorSubconjuntos);
-				this.buzonSalida.agregarElementoSemiactivo(mensajeActual);
-				System.out.println("El proceso inicial envio el mensaje: " + this.mensajeActual + "al buzon inicial");
-				this.buzonSalida.notify();
+				String mensajeNuevo = "M" + Integer.toString(contadorSubconjuntos);
+				this.buzonSalida.agregarElementoSemiactivo(mensajeNuevo);
+				System.out.println("El proceso inicial envio el mensaje " + mensajeNuevo + " al buzon inicial");
 				contadorSubconjuntos += 1;
 			}
 			
 			for (int i = 0; i < 3; i++) {
 				this.buzonSalida.agregarElementoSemiactivo("FIN");
 				System.out.println("El proceso inicial envio un mensaje de fin al buzon inicial");
-				this.buzonSalida.notify();
 			}
 			
 		}
@@ -52,11 +49,9 @@ public Proceso (int nuevaFila, int nuevoNivel, Buzon nuevaEntrada, Buzon nuevaSa
 		if (this.nivel >= 1 && this.nivel <= 3) {
 			while (!this.mensajeActual.equals("FIN")) {
 				this.mensajeActual = this.buzonEntrada.retirarElementoPasivo();
-				System.out.println("El proceso de nivel" + this.nivel + " y fila " + this.fila + " retiro el mensaje: " + this.mensajeActual);
-				this.buzonEntrada.notify();
+				System.out.println("El proceso de nivel " + this.nivel + " y fila " + this.fila + " retiro el mensaje: " + this.mensajeActual);
 				if (!this.mensajeActual.equals("FIN")) {
-					this.mensajeActual = "T" + Integer.toString(nivel) + Integer.toString(fila) + this.mensajeActual;
-					System.out.println();
+					this.mensajeActual = this.mensajeActual + "T" + Integer.toString(nivel) + Integer.toString(fila);
 					int minimo = 50;
 					int maximo = 500;
 					ThreadLocalRandom variableAleatoria = ThreadLocalRandom.current();
@@ -66,12 +61,10 @@ public Proceso (int nuevaFila, int nuevoNivel, Buzon nuevaEntrada, Buzon nuevaSa
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					
 				}
-				
+				System.out.println("Buenas tardes c:");
 				this.buzonSalida.agregarElementoPasivo(this.mensajeActual);
-				System.out.println("El proceso de nivel" + this.nivel + " y fila " + this.fila + " envio el mensaje: " + this.mensajeActual);
-				this.buzonSalida.notify();
+				System.out.println("El proceso de nivel " + this.nivel + " y fila " + this.fila + " envio el mensaje: " + this.mensajeActual);
 			}
 			
 		}
@@ -80,8 +73,7 @@ public Proceso (int nuevaFila, int nuevoNivel, Buzon nuevaEntrada, Buzon nuevaSa
 			int contadorFinales = 0;
 			while (contadorFinales < 3) {
 				String mensajeTemporal = this.buzonEntrada.retirarElementoSemiactivo();
-				System.out.println("El proceso final retiro el mensaje: " + mensajeTemporal);
-				this.buzonEntrada.notify();
+				System.out.println("El proceso final retiro el mensaje " + mensajeTemporal);
 				if (mensajeTemporal.equals("FIN")) {
 					contadorFinales++;
 				}
@@ -91,7 +83,6 @@ public Proceso (int nuevaFila, int nuevoNivel, Buzon nuevaEntrada, Buzon nuevaSa
 			
 			System.out.println("El resultado del procesamiento es: " + this.mensajeActual);
 		}
-		
 		
 	}
 

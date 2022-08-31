@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Buzon{
+public class Buzon {
 	
 	private ArrayList<String> mensajesBuzon;
 	private int tamanoBuzon;
@@ -14,45 +14,61 @@ public class Buzon{
 	
 	public synchronized void agregarElementoPasivo (String elemento) {
 		
-		if (this.mensajesBuzon.size() == tamanoBuzon) {
+		while (this.mensajesBuzon.size() == tamanoBuzon) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		}
+		
 		this.mensajesBuzon.add(elemento);
+		
+		this.notify();
+		
 	}
 	
 public synchronized void agregarElementoSemiactivo (String elemento) {
 		
-		if (this.mensajesBuzon.size() == tamanoBuzon) {
+		while (this.mensajesBuzon.size() == tamanoBuzon) {
 			Thread.yield();
 		}
+		
 		this.mensajesBuzon.add(elemento);
+		
+		this.notify();
+		
 	}
-	
 	
 	public synchronized String retirarElementoPasivo() {
 		
-		if (this.mensajesBuzon.isEmpty()) {
+		while (this.mensajesBuzon.isEmpty()) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		}
+		
 		String elementoRetirado = this.mensajesBuzon.remove(0);
+		
+		this.notify();
+		
 		return elementoRetirado;
 		
 	}
 	
 public synchronized String retirarElementoSemiactivo() {
 		
-		if (this.mensajesBuzon.isEmpty()) {
+		while (this.mensajesBuzon.isEmpty()) {
 			Thread.yield();
 		}
+		
 		String elementoRetirado = this.mensajesBuzon.remove(0);
+		
+		this.notify();
 		
 		return elementoRetirado;
 		
