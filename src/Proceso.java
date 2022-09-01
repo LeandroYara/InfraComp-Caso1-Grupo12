@@ -41,16 +41,17 @@ public class Proceso extends Thread {
             while (!mensajeFin.contains("FIN")) {
                 mensajeFin = this.recogida.retirarMensajePasivo(nivel,id);
                 this.entrega.escribirMensajePasivo(mensajeFin,nivel,id);
-               
             }
         }
         else if(nivel==3){
+            id=0;
             int cont=0;
             String mensajeFin = "";
-            while (!mensajeFin.contains("FIN")) {
+            while (!mensajeFin.contains("FIN") || cont<3) {
                 mensajeFin = this.recogida.retirarMensajePasivo(nivel,id);
-                if(mensajeFin.equals("FIN")){
+                if(mensajeFin.contains("FIN")){
                     cont++;
+                    System.out.println("------"+cont+"--------");
                 }
                
             }
