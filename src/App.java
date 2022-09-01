@@ -1,8 +1,8 @@
 public class App{
     private static boolean bol=false;
     public static void main(String[] args) {
-        int numMensajes=20;
-        int tamanoBuzon=6;
+        int numMensajes=200;
+        int tamanoBuzon=3;
         Buzon buzonInicial=new Buzon(tamanoBuzon, 0);
        
 
@@ -12,16 +12,20 @@ public class App{
         Buzon[] buzonesIntermedios=new Buzon[3];
         Proceso[] procesosIntermedios= new Proceso[6];      
         int tamanoBuzonFinal=1;
+        Buzon buzonFinal= new Buzon(tamanoBuzon,3);
 
         for(int i=0; i<3;i++){
         buzonesIntermedios[i]=new Buzon(tamanoBuzonFinal, 1, i+1);  
          procesosIntermedios[i]= new Proceso(i,1
          ,buzonInicial,buzonesIntermedios[i]);
          procesosIntermedios[i+3]= new Proceso(i,2
-         ,buzonesIntermedios[i],buzonInicial);
+         ,buzonesIntermedios[i],buzonFinal);
          procesosIntermedios[i].start();
          procesosIntermedios[i+3].start();
         }
+        Proceso procesoFinal= new Proceso( 3, buzonFinal);
+        procesoFinal.start();
+       
         bol=true;
     }
 }

@@ -29,7 +29,7 @@ public class Buzon {
         }
     }
 
-    public String retirarMensajeActivo() {
+    public String retirarMensajeActivo(int nivel, int id) {
         while (estaVacio()) {
             Thread.yield();            
         }
@@ -37,9 +37,9 @@ public class Buzon {
             String mensaje ="";
             try{
             mensaje= this.buff.remove(0);
-            System.out.println("Se retiró el mensaje: "+ mensaje);
-            System.out.println("El tamaño del buffer al momento de retirar fue: "+ buff.size());
-            notify();}
+            System.out.println("N"+nivel+"ID"+id+": retiró "+mensaje);
+            System.out.println("El tamaño del buffer "+"N"+nivel+"ID"+id+ " al retirar es: "+buff.size());
+            notifyAll();}
             catch(Exception e){
                 e.printStackTrace();
             }
