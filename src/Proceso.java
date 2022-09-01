@@ -62,7 +62,6 @@ public Proceso (int nuevaFila, int nuevoNivel, Buzon nuevaEntrada, Buzon nuevaSa
 						e.printStackTrace();
 					}
 				}
-				System.out.println("Buenas tardes c:");
 				this.buzonSalida.agregarElementoPasivo(this.mensajeActual);
 				System.out.println("El proceso de nivel " + this.nivel + " y fila " + this.fila + " envio el mensaje: " + this.mensajeActual);
 			}
@@ -76,6 +75,7 @@ public Proceso (int nuevaFila, int nuevoNivel, Buzon nuevaEntrada, Buzon nuevaSa
 				System.out.println("El proceso final retiro el mensaje " + mensajeTemporal);
 				if (mensajeTemporal.equals("FIN")) {
 					contadorFinales++;
+					System.out.println("Numero de mensajes finales recibidos: " + Integer.toString(contadorFinales));
 				}
 				
 				this.mensajeActual = this.mensajeActual + " - " + mensajeTemporal;

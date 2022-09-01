@@ -29,15 +29,19 @@ public class Buzon {
 		
 	}
 	
-public synchronized void agregarElementoSemiactivo (String elemento) {
+public void agregarElementoSemiactivo (String elemento) {
 		
 		while (this.mensajesBuzon.size() == tamanoBuzon) {
 			Thread.yield();
 		}
+
+		synchronized(this){
 		
 		this.mensajesBuzon.add(elemento);
 		
 		this.notify();
+
+		}
 		
 	}
 	
@@ -54,23 +58,27 @@ public synchronized void agregarElementoSemiactivo (String elemento) {
 		
 		String elementoRetirado = this.mensajesBuzon.remove(0);
 		
-		this.notify();
+		this.notifyAll();
 		
 		return elementoRetirado;
 		
 	}
 	
-public synchronized String retirarElementoSemiactivo() {
-		
+public String retirarElementoSemiactivo() {
+
 		while (this.mensajesBuzon.isEmpty()) {
 			Thread.yield();
 		}
+
+		synchronized(this){
 		
 		String elementoRetirado = this.mensajesBuzon.remove(0);
 		
-		this.notify();
+		this.notifyAll();
 		
 		return elementoRetirado;
+
+		}
 		
 	}
 
