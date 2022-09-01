@@ -2,7 +2,7 @@ public class App{
     private static boolean bol=false;
     public static void main(String[] args) {
         int numMensajes=10000;
-        int tamanoBuzon=2;
+        int tamanoBuzon=30;
         Buzon buzonInicial=new Buzon(tamanoBuzon, 0);
        
 

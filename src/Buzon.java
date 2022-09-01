@@ -24,9 +24,13 @@ public class Buzon {
             Thread.yield();
         }
         synchronized (this) {
+            try{
             buff.add(mensaje);
             System.out.println("Buzon Inicial Escribió: "+mensaje);
-            notify();
+            notify();}
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -40,7 +44,7 @@ public class Buzon {
             mensaje= this.buff.remove(0);
             System.out.println("Se retiró el mensaje: "+ mensaje);
             System.out.println("-----El tamaño del buffer al momento de retirar fue: "+ buff.size());
-            notify();}
+            notifyAll();}
             catch(Exception e){
                 e.printStackTrace();
             }
