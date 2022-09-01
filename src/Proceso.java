@@ -38,16 +38,20 @@ public class Proceso extends Thread {
             }
         } else if(nivel==1||nivel==2) {
             String mensajeFin = "";
-            while (!mensajeFin.equals("FIN")) {
+            while (!mensajeFin.contains("FIN")) {
                 mensajeFin = this.recogida.retirarMensajePasivo(nivel,id);
                 this.entrega.escribirMensajePasivo(mensajeFin,nivel,id);
                
             }
         }
         else if(nivel==3){
+            int cont=0;
             String mensajeFin = "";
-            while (!mensajeFin.equals("FIN")) {
-                mensajeFin = this.recogida.retirarMensajeActivo(nivel,id);
+            while (!mensajeFin.contains("FIN")) {
+                mensajeFin = this.recogida.retirarMensajePasivo(nivel,id);
+                if(mensajeFin.equals("FIN")){
+                    cont++;
+                }
                
             }
         }

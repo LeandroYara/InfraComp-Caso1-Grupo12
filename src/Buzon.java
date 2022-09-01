@@ -73,7 +73,7 @@ public class Buzon {
         String mensaje = buff.remove(0);
         System.out.println("N"+nivel+"ID"+id+": retiró "+mensaje);
         System.out.println("El tamaño del buffer "+"N"+nivel+"ID"+id+ " al retirar es: "+buff.size());
-        notify();
+        notifyAll();
         return mensaje;
     }
 
