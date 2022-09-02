@@ -57,6 +57,9 @@ public class Proceso extends Thread {
                     cont++;
                     System.out.println("------"+cont+"--------");
                 }
+                if (cont == 3) {
+                    System.out.println("Ejecución terminada. Los mensajes fueron procesados y enviados.");
+                }
                
             }
         }
