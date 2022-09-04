@@ -1,54 +1,50 @@
 import java.util.ArrayList;
 
 public class Buzon {
+
     private ArrayList<String> buff;
     private int tamano;
-    private int nivel;
-    private int id;
+    private String Bname;
 
-    public Buzon(int n, int nivel, int id) {
+    // Buzones extremos
+    public Buzon(int n, int pNivel) {
         this.tamano = n;
-        buff = new ArrayList<String>();
-        this.nivel = nivel;
-        this.id = id;
+        this.buff = new ArrayList<String>();
+        this.Bname = pNivel == 0 ? "B-inicial" : "B-final";
     }
 
-    public Buzon(int n, int nivel) { // Buzones extremos que no necesitan id
+    // Buzones intermedios
+    public Buzon(int n, int pId, int pNivel) {
         this.tamano = n;
-        buff = new ArrayList<String>();
-        this.nivel = nivel;
+        this.buff = new ArrayList<String>();
+        this.Bname = "B-" + pNivel + pId;
     }
 
-    public void escribirMensajeActivo(String mensaje) {
+    public void escribirMensajeActivo(String mensaje, String Tname) {
         while (estaLleno()) {
             Thread.yield();
         }
         synchronized (this) {
             buff.add(mensaje);
+            System.out.println("Proceso " + Tname + " escribió mensaje '" + mensaje + "' al buzón " + Bname + " (tamaño actual: " + buff.size() + ")");
             notify();
         }
     }
 
-    public String retirarMensajeActivo(int nivel, int id) {
+    public String retirarMensajeActivo(int nivel, int id, String Tname) {
         while (estaVacio()) {
             Thread.yield();            
         }
         synchronized (this) {
-            String mensaje ="";
-            try{
-            mensaje= this.buff.remove(0);
-            System.out.println("N"+nivel+"ID"+id+": retiró "+mensaje);
-            System.out.println("El tamaño del buffer "+"N"+nivel+"ID"+id+ " al retirar es: "+buff.size());
-            notifyAll();}
-            catch(Exception e){
-                e.printStackTrace();
-            }
+            String mensaje = this.buff.remove(0);
+            System.out.println("Proceso " + Tname + "retiró mensaje '" + mensaje + "' del buzón " + Bname + " (tamaño actual: " + buff.size() + ")");
+            notifyAll();
             return mensaje;
         }
 
     }
 
-    public synchronized void escribirMensajePasivo(String mensaje, int nivel,int id) {
+    public synchronized void escribirMensajePasivo(String mensaje, String Tname) {
         while (buff.size() == tamano) {
             try {
                 wait();
@@ -57,12 +53,11 @@ public class Buzon {
             }
         }
         buff.add(mensaje);
-        System.out.println("En el nivel " +nivel+ " el thread "+id+ " escribió: "+mensaje);
-        System.out.println("El tamaño del buffer "+"N"+nivel+"ID"+id+ " al escribir es: "+buff.size());
+        System.out.println("Proceso " + Tname + " escribió mensaje '" + mensaje + "' al buzón " + Bname + " (tamaño actual: " + buff.size() + ")");
         notifyAll();
     }
 
-    public synchronized String retirarMensajePasivo(int nivel,int id) {
+    public synchronized String retirarMensajePasivo(String Tname) {
         while (buff.isEmpty()) {
             try {
                 wait();
@@ -71,19 +66,11 @@ public class Buzon {
             }
         }
         String mensaje = buff.remove(0);
-        System.out.println("N"+nivel+"ID"+id+": retiró "+mensaje);
-        System.out.println("El tamaño del buffer "+"N"+nivel+"ID"+id+ " al retirar es: "+buff.size());
+        System.out.println("Proceso " + Tname + " retiró mensaje '" + mensaje + "' del buzón " + Bname + " (tamaño actual: " + buff.size() + ")");
         notifyAll();
         return mensaje;
     }
 
-    public int darNivel() {
-        return nivel;
-    }
-
-    public int darId() {
-        return id;
-    }
     public synchronized boolean estaVacio(){
         return buff.size()==0;
     }

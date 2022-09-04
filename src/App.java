@@ -3,8 +3,8 @@ import java.util.Scanner;
 public class App{
 
     // Parámetros generales (generalizado a X niveles y Y transformaciones)
-    private static int niveles = 3;
-    private static int transformaciones = 3;
+    public static int niveles = 3;
+    public static int transformaciones = 3;
 
     public static void main(String[] args) {
 
@@ -27,18 +27,18 @@ public class App{
 
         /* 2. Crear los buzones */
         Buzon bInicial = new Buzon(tamanoBuzonFinal, 0);
-        Buzon bFinal= new Buzon(tamanoBuzonFinal, 4);
+        Buzon bFinal= new Buzon(tamanoBuzonFinal, niveles+1);
 
         Buzon[][] buzones = new Buzon[niveles][transformaciones-1];
         for (int i = 0; i < niveles; i++) {
             for (int j = 0; j < transformaciones-1; j++) {
-                buzones[i][j] = new Buzon(tamanoBuzonIntermedio, i+1, j+1);
+                buzones[i][j] = new Buzon(tamanoBuzonIntermedio, j+1, i+1);
             }
         }
 
         /* 3. Crear los procesos */
         Proceso procesoInicial = new Proceso(0, bInicial, numMensajes);  
-        Proceso procesoFinal= new Proceso(4, bFinal);
+        Proceso procesoFinal= new Proceso(niveles+1, bFinal);
 
         Proceso[][] procesos= new Proceso[niveles][transformaciones];
 

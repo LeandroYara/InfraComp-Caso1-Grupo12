@@ -5,54 +5,60 @@ public class Proceso extends Thread {
     private Buzon entrega;
     private static int numSubConjuntos;
 
-    public Proceso(int id, int nivel, Buzon recogida, Buzon entrega) {// Buzones intermedios
-        this.id = id;
-        this.nivel = nivel;
-        this.recogida = recogida;
-        this.entrega = entrega;
+    // Proceso inicial
+    public Proceso(int pNivel, Buzon pEntrega, int pNumSubConjuntos) {
+        this.nivel = pNivel;
+        this.entrega = pEntrega;
+        numSubConjuntos = pNumSubConjuntos;
     }
 
-    public Proceso(int nivel, Buzon buzonRecogida) {// Es el proceso final
-        this.nivel = nivel;
-        this.recogida = buzonRecogida;
+    // Proceso final
+    public Proceso(int pNivel, Buzon pBuzonRecogida) {
+            this.nivel = pNivel;
+            this.recogida = pBuzonRecogida;
     }
-
-    public Proceso(int nivel, Buzon entrega, int numSubConjuntos) { // Si es el proceso inicial
-        this.nivel = nivel;
-        this.entrega = entrega;
-        this.numSubConjuntos = numSubConjuntos;
+    
+    // Proceso intermedio
+    public Proceso(int pId, int pNivel, Buzon pRecogida, Buzon pEntrega) {
+        this.id = pId;
+        this.nivel = pNivel;
+        this.recogida = pRecogida;
+        this.entrega = pEntrega;
     }
 
     @Override
     public void run() {
-        if (nivel == 0) {// Thread inicial escribe los n mensajes
+        String Tname = nivel == 0 ? "Tini" : (
+           nivel == App.niveles+1 ? "Tfin" : "T" + nivel + id);
+        System.out.println("Proceso " + Tname + " iniciando...");
+        if (nivel == 0) {
+            // Proceso inicial
             for (int i = 0; i < numSubConjuntos; i++) {
                 if (i < numSubConjuntos - 1) {
-                    System.out.print("Se envia mensaje: ");
-                    entrega.escribirMensajeActivo("M" + i);
+                    entrega.escribirMensajeActivo("M"+i, Tname);
                 } else {
-                    for (int j = 0; j < 3; j++)
+                    for (int j = 0; j < App.niveles; j++)
                     {
-                        entrega.escribirMensajeActivo("FIN");
+                        entrega.escribirMensajeActivo("FIN", Tname);
                     }
                 }
             }
-        } else if(nivel==1||nivel==2||nivel==3) {
+        } else if (nivel > 0 && nivel <= App.niveles) {
+            // Proceso intermedio
             String mensajeFin = "";
             while (!mensajeFin.contains("FIN")) {
-                mensajeFin = this.recogida.retirarMensajePasivo(nivel,id);
+                mensajeFin = this.recogida.retirarMensajePasivo(Tname);
                 if (!mensajeFin.contains("FIN")){
-                    mensajeFin = mensajeFin + "T" + this.nivel + this.id;
+                    mensajeFin = mensajeFin + Tname;
                 }
-                this.entrega.escribirMensajePasivo(mensajeFin,nivel,id);
+                this.entrega.escribirMensajePasivo(mensajeFin,Tname);
             }
-        }
-        else if(nivel==4){
-            id=0;
+        } else {
+            // Proceso final
             int cont=0;
             String mensajeFin = "";
-            while (!mensajeFin.contains("FIN") || cont<3) {
-                mensajeFin = this.recogida.retirarMensajePasivo(nivel,id);
+            while (!mensajeFin.contains("FIN") || cont < App.niveles) {
+                mensajeFin = this.recogida.retirarMensajePasivo(Tname);
                 if(mensajeFin.contains("FIN")){
                     cont++;
                     System.out.println("------"+cont+"--------");
